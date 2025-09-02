@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendário de Posts Profissional</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="calendar-container">
+
+    <h1>Calendário de Posts</h1>
+
+    <!-- Botões de Filtros e Editorias -->
+    <div class="top-buttons">
+      <div class="filter-container">
+        <button id="filterBtn">Filtros &#9662;</button>
+        <div id="filterMenu" class="filter-menu">
+          <div class="filter-section">
+            <strong>Status:</strong><br>
+            <label><input type="checkbox" class="statusFilter" data-status="planned" checked> Planejado</label><br>
+            <label><input type="checkbox" class="statusFilter" data-status="published" checked> Publicado</label>
+          </div>
+          <div class="filter-section">
+            <strong>Editorias:</strong><br>
+            <label><input type="checkbox" class="colorFilter" data-color="#3498DB" checked> Inovação em Automação e Autonomia Industrial</label><br>
+            <label><input type="checkbox" class="colorFilter" data-color="#9B59B6" checked> Yoko na Mídia</label><br>
+            <label><input type="checkbox" class="colorFilter" data-color="#F1C40F" checked> Co-innovating Tomorrow</label><br>
+            <label><input type="checkbox" class="colorFilter" data-color="#3E6B2F" checked> Yokogawa em Foco</label><br>
+            <label><input type="checkbox" class="colorFilter" data-color="#95A5A6" checked> Feiras e Eventos</label>
+          </div>
+          <button id="clearFilters">Limpar filtros</button>
+        </div>
+      </div>
+
+      <div class="editorias-container">
+        <button id="editoriasBtn">Editorias &#9662;</button>
+        <div id="editoriasMenu" class="editorias-menu">
+          <div class="editoria-item"><strong style="color:#3498DB">Inovação em Automação e Autonomia Industrial</strong>
+            <ul>
+              <li>Instrumentação</li>
+              <li>Sistemas</li>
+              <li>Soluções Disruptivas</li>
+              <li>Serviços</li>
+            </ul>
+          </div>
+          <div class="editoria-item"><strong style="color:#9B59B6">Yoko na Mídia</strong>
+            <ul>
+              <li>Press Releases da Matriz</li>
+              <li>Jornais</li>
+              <li>Revistas</li>
+            </ul>
+          </div>
+          <div class="editoria-item"><strong style="color:#F1C40F">Co-innovating Tomorrow</strong>
+            <ul>
+              <li>Cases de Sucesso</li>
+              <li>Entrevistas</li>
+              <li>Depoimentos</li>
+              <li>Filmagem in loco</li>
+            </ul>
+          </div>
+          <div class="editoria-item"><strong style="color:#3E6B2F">Yokogawa em Foco</strong>
+            <ul>
+              <li>Eventos internos</li>
+              <li>Treinamentos</li>
+              <li>Bastidores</li>
+              <li>Comunicações ESG</li>
+              <li>História Yokogawa</li>
+              <li>Visão, Missão, Valores</li>
+              <li>Principios Propósito, Filosofia</li>
+              <li>Marca, Slogan, Logo</li>
+              <li>Webinars</li>
+            </ul>
+          </div>
+          <div class="editoria-item"><strong style="color:#95A5A6">Feiras e Eventos</strong>
+            <ul>
+              <li>Feiras</li>
+              <li>Palestras</li>
+              <li>Congressos</li>
+              <li>Webinars externos</li>
+              <li>Demais eventos externos</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🔒 Backup manual JSON -->
+      <div class="backup-group">
+        <button id="exportBtn" title="Exportar posts para JSON">Exportar JSON</button>
+        <input type="file" id="importFile" accept="application/json,.json" style="display:none">
+        <button id="importBtn" title="Importar posts de um JSON">Importar JSON</button>
+      </div>
+    </div>
+
+    <!-- Navegação do calendário -->
+    <div class="calendar-header">
+      <div>
+        <button id="prevYear">&lt;&lt;</button>
+        <button id="prev">&lt;</button>
+        <button id="next">&gt;</button>
+        <button id="nextYear">&gt;&gt;</button>
+      </div>
+      <h2 id="month-year"></h2>
+    </div>
+
+    <div class="calendar-days">
+      <div class="day-name">Dom</div>
+      <div class="day-name">Seg</div>
+      <div class="day-name">Ter</div>
+      <div class="day-name">Qua</div>
+      <div class="day-name">Qui</div>
+      <div class="day-name">Sex</div>
+      <div class="day-name">Sáb</div>
+    </div>
+
+    <div id="calendar" class="calendar-grid"></div>
+  </div>
+
+  <!-- Modal para adicionar/editar posts -->
+  <div id="postModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h3>Post</h3>
+      <textarea id="postText" placeholder="Descrição do post"></textarea>
+      <div class="editoria-buttons">
+        <button class="editoria-btn" data-color="#3498DB">Inovação em Automação e Autonomia Industrial</button>
+        <button class="editoria-btn" data-color="#9B59B6">Yoko na Mídia</button>
+        <button class="editoria-btn" data-color="#F1C40F">Co-innovating Tomorrow</button>
+        <button class="editoria-btn" data-color="#3E6B2F">Yokogawa em Foco</button>
+        <button class="editoria-btn" data-color="#95A5A6">Feiras e Eventos</button>
+      </div>
+      <label><input type="checkbox" id="postPublished"> Publicado</label>
+      <div class="modal-buttons">
+        <button id="savePost">Salvar</button>
+        <button id="deletePost">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

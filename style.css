@@ -1,0 +1,229 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.calendar-container {
+  width: 95%;
+  max-width: 950px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.top-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* 🔒 agrupa os botões de backup à direita */
+.backup-group { margin-left: auto; display: flex; gap: 8px; }
+
+/* Filtros */
+.filter-container, .editorias-container {
+  position: relative;
+}
+
+#filterBtn, #editoriasBtn {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.filter-menu, .editorias-menu {
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 6px;
+  top: 30px;
+  left: 0;
+  z-index: 5;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.filter-section, .editoria-item {
+  margin-bottom: 10px;
+}
+
+.filter-menu label, .editoria-item ul {
+  font-size: 13px;
+}
+
+/* Navegação calendário */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.calendar-header h2 {
+  margin: 0;
+}
+
+/* Grid do calendário */
+.calendar-days, .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-top: 5px;
+}
+.day-name {
+  text-align: center;
+  font-weight: bold;
+  color: #555;
+}
+
+.day {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  min-height: 100px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.day-number {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* Posts */
+.post {
+  flex: 1;
+  margin: 1px 0;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 4px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.1s;
+}
+
+.post:hover {
+  transform: scale(1.03);
+}
+
+.post.planned {
+  opacity: 0.7;
+  border: 1px dashed #555;
+}
+
+.post.published {
+  opacity: 1;
+  border: 3px solid #27AE60;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+/* Tick verde com contorno branco */
+.post.published::after {
+  content: "✔";
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 16px;
+  color: #27AE60;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+}
+
+/* Texto preto para posts amarelos */
+.post[style*="F1C40F"] { color: #000; }
+/* Verde musgo */
+.post[style*="#3E6B2F"] { color: #fff; }
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 320px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 18px;
+}
+.modal-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.modal-buttons button {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  transition: background 0.2s;
+}
+.modal-buttons button:hover {
+  background: #f0f0f0;
+}
+
+/* Textarea expansível */
+#postText {
+  width: 100%;
+  min-height: 60px;
+  resize: vertical;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* Botões das editorias */
+.editoria-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0;
+}
+.editoria-btn {
+  padding: 10px;
+  text-align: left;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  background: #f9f9f9;
+  transition: 0.2s;
+}
+.editoria-btn:hover { background: #eee; }
+.editoria-btn.selected { border-color: #333; font-weight: bold; }
+
