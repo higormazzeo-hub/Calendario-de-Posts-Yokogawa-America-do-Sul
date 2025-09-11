@@ -24,7 +24,7 @@ let posts = JSON.parse(localStorage.getItem("calendarPosts")) || {};
 let selectedDate = null;
 let selectedPostIndex = null;
 
-// Modal
+// Modal principal
 const modal = document.getElementById("postModal");
 const closeModalBtn = document.getElementById("closeModal");
 const savePostBtn = document.getElementById("savePost");
@@ -32,6 +32,12 @@ const deletePostBtn = document.getElementById("deletePost");
 const postTextEl = document.getElementById("postText");
 const postPublishedEl = document.getElementById("postPublished");
 const editoriaButtons = document.querySelectorAll(".editoria-btn");
+const openCommentsBtn = document.getElementById("openComments");
+
+// Modal de comentários
+const commentsModal = document.getElementById("commentsModal");
+const closeCommentsBtn = document.getElementById("closeComments");
+const postCommentsEl = document.getElementById("postComments");
 
 let selectedColor = "#3498DB";
 
@@ -88,13 +94,11 @@ function renderCalendar(){
         postEl.textContent=post.text || "";
         postEl.style.color=(post.color||"").toUpperCase()==="#F1C40F"?"#000":"#fff";
 
-        // Filtros
         const statusKey = post.published ? "published" : "planned";
         const colorChecked = Array.from(colorFilters).find(f=>f.dataset.color===(post.color||""))?.checked ?? true;
         const statusChecked = Array.from(statusFilters).find(f=>f.dataset.status===statusKey)?.checked ?? true;
         if(!colorChecked || !statusChecked) postEl.style.display="none";
 
-        // Shift+Click alterna status
         postEl.addEventListener("click", e=>{
           e.stopPropagation();
           if(e.shiftKey){
@@ -106,7 +110,6 @@ function renderCalendar(){
           }
         });
 
-        // Drag-and-drop
         postEl.draggable=true;
         postEl.addEventListener("dragstart",e=>{
           e.dataTransfer.setData("text/plain",JSON.stringify({dateKey,index}));
@@ -116,10 +119,8 @@ function renderCalendar(){
       });
     }
 
-    // Abrir modal ao clicar na célula
     cell.addEventListener("click",()=>openModal(dateKey));
 
-    // Drag-over e drop
     cell.addEventListener("dragover",e=>e.preventDefault());
     cell.addEventListener("drop",e=>{
       e.preventDefault();
@@ -138,7 +139,7 @@ function renderCalendar(){
   }
 }
 
-// Modal
+// Modal principal
 function openModal(dateKey,postIndex=null){
   selectedDate=dateKey;
   selectedPostIndex=postIndex;
@@ -146,17 +147,16 @@ function openModal(dateKey,postIndex=null){
   if(postIndex!==null){
     const post = posts[dateKey][postIndex];
     postTextEl.value = post.text || "";
+    postCommentsEl.value = post.comments || "";
     selectedColor = post.color || "#3498DB";
     postPublishedEl.checked = !!post.published;
-
-    // Marca botão da editoria
     editoriaButtons.forEach(b=>{
       b.classList.toggle("selected", b.dataset.color===selectedColor);
     });
-
     deletePostBtn.style.display="inline-block";
   } else {
     postTextEl.value="";
+    postCommentsEl.value="";
     selectedColor="#3498DB";
     postPublishedEl.checked=false;
     editoriaButtons.forEach(b=>{
@@ -169,23 +169,42 @@ function openModal(dateKey,postIndex=null){
   modal.style.display="flex";
 }
 
-closeModalBtn.onclick=()=>modal.style.display="none";
-window.onclick=e=>{if(e.target===modal) modal.style.display="none";};
+function closeModal(){ modal.style.display="none"; }
+function closeComments(){ commentsModal.style.display="none"; }
+
+closeModalBtn.onclick=closeModal;
+closeCommentsBtn.onclick=closeComments;
+
+window.onclick=e=>{
+  if(e.target===modal) closeModal();
+  if(e.target===commentsModal) closeComments();
+};
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    if(modal.style.display==="flex") closeModal();
+    if(commentsModal.style.display==="flex") closeComments();
+  }
+});
+
+// Abrir modal de comentários
+openCommentsBtn.onclick=()=>{ commentsModal.style.display="flex"; };
 
 // Salvar post
 savePostBtn.onclick=()=>{
   const text=postTextEl.value.trim();
+  const comments=postCommentsEl.value.trim();
   const published=postPublishedEl.checked;
   if(!text) return;
   if(!posts[selectedDate]) posts[selectedDate]=[];
   if(selectedPostIndex!==null){
-    posts[selectedDate][selectedPostIndex]={text,color:selectedColor,published};
+    posts[selectedDate][selectedPostIndex]={text,color:selectedColor,published,comments};
   } else {
     if(posts[selectedDate].length>=4){ alert("Máximo de 4 posts por dia!"); return; }
-    posts[selectedDate].push({text,color:selectedColor,published});
+    posts[selectedDate].push({text,color:selectedColor,published,comments});
   }
   savePosts();
-  modal.style.display="none";
+  closeModal();
   renderCalendar();
 };
 
@@ -195,20 +214,16 @@ deletePostBtn.onclick=()=>{
     posts[selectedDate].splice(selectedPostIndex,1);
     if(posts[selectedDate].length===0) delete posts[selectedDate];
     savePosts();
-    modal.style.display="none";
+    closeModal();
     renderCalendar();
   }
 };
 
-// Navegação mês
 prevBtn.onclick=()=>{currentDate.setMonth(currentDate.getMonth()-1); renderCalendar();}
 nextBtn.onclick=()=>{currentDate.setMonth(currentDate.getMonth()+1); renderCalendar();}
-
-// Navegação ano
 prevYearBtn.onclick=()=>{currentDate.setFullYear(currentDate.getFullYear()-1); renderCalendar();}
 nextYearBtn.onclick=()=>{currentDate.setFullYear(currentDate.getFullYear()+1); renderCalendar();}
 
-// Filtros
 colorFilters.forEach(f=>f.addEventListener("change",renderCalendar));
 statusFilters.forEach(f=>f.addEventListener("change",renderCalendar));
 clearFiltersBtn.onclick=()=>{
@@ -217,7 +232,6 @@ clearFiltersBtn.onclick=()=>{
   renderCalendar();
 }
 
-// Export / Import JSON
 function exportBackup(){
   const blob = new Blob([JSON.stringify(posts,null,2)], {type:"application/json"});
   const a = document.createElement("a");
@@ -258,6 +272,4 @@ exportBtn.addEventListener("click", exportBackup);
 importBtn.addEventListener("click",()=>importFile.click());
 importFile.addEventListener("change",e=>{ if(e.target.files[0]) importBackup(e.target.files[0]); });
 
-// Inicializa
 renderCalendar();
-
