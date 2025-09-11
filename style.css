@@ -28,10 +28,8 @@ h1 {
   flex-wrap: wrap;
 }
 
-/* 🔒 agrupa os botões de backup à direita */
 .backup-group { margin-left: auto; display: flex; gap: 8px; }
 
-/* Filtros */
 .filter-container, .editorias-container {
   position: relative;
 }
@@ -66,7 +64,6 @@ h1 {
   font-size: 13px;
 }
 
-/* Navegação calendário */
 .calendar-header {
   display: flex;
   justify-content: space-between;
@@ -77,7 +74,6 @@ h1 {
   margin: 0;
 }
 
-/* Grid do calendário */
 .calendar-days, .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -106,7 +102,6 @@ h1 {
   margin-bottom: 4px;
 }
 
-/* Posts */
 .post {
   flex: 1;
   margin: 1px 0;
@@ -136,7 +131,6 @@ h1 {
   box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 
-/* Tick verde com contorno branco */
 .post.published::after {
   content: "✔";
   position: absolute;
@@ -148,12 +142,9 @@ h1 {
   text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 
-/* Texto preto para posts amarelos */
 .post[style*="F1C40F"] { color: #000; }
-/* Verde musgo */
 .post[style*="#3E6B2F"] { color: #fff; }
 
-/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -170,9 +161,18 @@ h1 {
   border-radius: 8px;
   width: 320px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  position: relative;
+}
+.modal-content.large {
+  width: 500px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
 }
 .close {
-  float: right;
+  position: absolute;
+  top: 8px;
+  right: 12px;
   cursor: pointer;
   font-size: 18px;
 }
@@ -194,8 +194,7 @@ h1 {
   background: #f0f0f0;
 }
 
-/* Textarea expansível */
-#postText {
+#postText, #postComments {
   width: 100%;
   min-height: 60px;
   resize: vertical;
@@ -206,8 +205,10 @@ h1 {
   font-family: inherit;
   font-size: 14px;
 }
-
-/* Botões das editorias */
+#postComments {
+  flex: 1;
+  min-height: unset;
+}
 .editoria-buttons {
   display: flex;
   flex-direction: column;
